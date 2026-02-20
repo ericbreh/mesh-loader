@@ -1,0 +1,24 @@
+diff --git a/src/FSCommon.h b/src/FSCommon.h
+index fdc0b76ec..f8c69495c 100644
+--- a/src/FSCommon.h
++++ b/src/FSCommon.h
+@@ -35,7 +35,7 @@ using namespace STM32_LittleFS_Namespace;
+ // ESP32 version
+ #include "LittleFS.h"
+ #define FSCom LittleFS
+-#define FSBegin() FSCom.begin(true) // format on failure
++#define FSBegin() FSCom.begin(true, "/littlefs", 10, "tastic_fs") // format on failure, use tastic_fs partition for dual-boot
+ #define FILE_O_WRITE "w"
+ #define FILE_O_READ "r"
+ #endif
+diff --git a/src/platform/esp32/OTAValidation.cpp b/src/platform/esp32/OTAValidation.cpp
+new file mode 100644
+index 000000000..cf9a80df9
+--- /dev/null
++++ b/src/platform/esp32/OTAValidation.cpp
+@@ -0,0 +1,5 @@
++#include <Arduino.h>
++
++extern "C" bool verifyRollbackLater() {
++    return true;
++}

@@ -1,0 +1,25 @@
+diff --git a/boards/heltec_v4.json b/boards/heltec_v4.json
+index 36cdfc0..19bc82f 100644
+--- a/boards/heltec_v4.json
++++ b/boards/heltec_v4.json
+@@ -2,7 +2,7 @@
+   "build": {
+     "arduino": {
+       "ldscript": "esp32s3_out.ld",
+-      "partitions": "default_16MB.csv",
++      "partitions": "partitions.csv",
+       "memory_type": "qio_qspi"
+       },
+     "core": "esp32",
+diff --git a/variants/heltec_v4/platformio.ini b/variants/heltec_v4/platformio.ini
+index c5011e0..f59a301 100644
+--- a/variants/heltec_v4/platformio.ini
++++ b/variants/heltec_v4/platformio.ini
+@@ -1,6 +1,7 @@
+ [Heltec_lora32_v4]
+ extends = esp32_base
+ board = heltec_v4
++board_build.partitions = partitions.csv
+ build_flags =
+   ${esp32_base.build_flags}
+   ${sensor_base.build_flags}

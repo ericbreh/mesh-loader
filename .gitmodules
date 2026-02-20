@@ -1,0 +1,6 @@
+[submodule "modules/meshtastic"]
+	path = modules/meshtastic
+	url = git@github.com:meshtastic/firmware.git
+[submodule "modules/meshcore"]
+	path = modules/meshcore
+	url = git@github.com:meshcore-dev/MeshCore.git
