@@ -1,5 +1,5 @@
 # Mesh Loader
-"Dual Boot" firmware for running Meshcore and Meshtastic on a single Ep32 based device without re-flashing. Currently, only works for Heltec v4, but should be very simple to contribute patches for other variants so long as they have sufficient flash (probably 16MB+ maybe 8MB+).
+"Dual Boot" firmware for running Meshcore and Meshtastic on a single Ep32 based device without re-flashing. Currently, only works for Heltec v4, but should be very simple to contribute patches for other variants so long as they have sufficient flash (6MB+).
 
 ## What Does it Do?
 
@@ -34,8 +34,15 @@ Note that precompiled releases may be available in the releases section. These c
 ## Adding a Patch for Your Device
 ### Adding Loader Variant
 You need to add a new loader variant to [loader/variants](loader/variants). I recommend copying the platformio config for your variant from meshcore and then removing parts that are not needed.
-### Adding the Patch
-1. Make your device-specific modifications to the module directly to the meshtastic/meshcore source code. Changes should be very minimal. Follow the [meshcore/heltec_v4](patches/meshcore/heltec_v4.patch) and [meshtastic/heltec_v4](patches/meshtastic/heltec_v4.patch) examples. Do not duplicate changes in `patches/<module name>/common.patch`.
+### Adding mk Config
+Create a new `.mk` file based on [variants/heltec_v4.mk](variants/heltec_v4.mk). This file needs to have the same name as the `.patch` file which must be the same as the variant name.
+
+### Adding Partition Config (Optional)
+if a size/layout that will work for your flash does not exist you may create one in [partitions](./partitions/).
+
+### Adding the Patch (Optional)
+This step should be avoided unless necessary. It should be possible to only use already present patches.
+1. Make your device-specific modifications to the module directly to the meshtastic/meshcore source code.
 2. Generate the patch file:.
 ```bash
 cd modules/<module name> && git add . && git diff --cached > ../../patches/<module_name>/<variant_name>.patch
@@ -44,12 +51,6 @@ cd modules/<module name> && git add . && git diff --cached > ../../patches/<modu
 ```bash
 cd modules/<module name> && git reset --hard HEAD
 ```
-### Adding mk Config
-Create a new `.mk` file based on [variants/heltec_v4.mk](variants/heltec_v4.mk). This file needs to have the same name as the `.patch` file which must be the same as the variant name.
-
-### Adding Partition Config
-if a size/layout that will work for your flash does not exist you may create one in [partitions](./partitions/).
-
 ### Test
 Test with:
 ```bash

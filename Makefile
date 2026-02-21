@@ -55,9 +55,9 @@ MESHTASTIC_BUILD = $(BUILD_DIR)/meshtastic
 MESHCORE_BUILD = $(BUILD_DIR)/meshcore
 
 # Patch files (common + variant-specific only)
-MESHTASTIC_PATCHES = $(PATCH_DIR)/meshtastic/common.patch $(PATCH_DIR)/meshtastic/$(VARIANT).patch
+MESHTASTIC_PATCHES = $(wildcard $(PATCH_DIR)/meshtastic/common.patch $(PATCH_DIR)/meshtastic/$(VARIANT).patch)
 
-MESHCORE_PATCHES = $(PATCH_DIR)/meshcore/common.patch $(PATCH_DIR)/meshcore/$(VARIANT).patch
+MESHCORE_PATCHES = $(wildcard $(PATCH_DIR)/meshcore/common.patch $(PATCH_DIR)/meshcore/$(VARIANT).patch)
 
 # Marker files to track build stages
 MESHTASTIC_PATCH_MARKER = $(MESHTASTIC_BUILD)/.patched
@@ -87,7 +87,9 @@ $(MESHTASTIC_PATCH_MARKER): $(MESHTASTIC_PATCHES) $(PARTITION_MESHTASTIC) | $(BU
 		for patch in $(abspath $(MESHTASTIC_PATCHES)); do \
 			echo "    Applying $$(basename $$patch)..."; \
 			patch -p1 < $$patch; \
-		done
+		done; \
+		echo "    Removing board_build.partitions from platformio.ini files..."; \
+		find . -name platformio.ini -exec sed -i '/board_build.partitions/d' {} +
 	@cp $(PARTITION_MESHTASTIC) $(MESHTASTIC_BUILD)/partitions.csv
 	@touch $@
 	@echo "    Meshtastic patches applied (build-time partitions: $(PARTITION_MESHTASTIC))"
